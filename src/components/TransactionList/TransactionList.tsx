@@ -10,13 +10,15 @@ import TableBodyCell from 'components/Table/TableBodyCell';
 import { rootState } from 'stores/rootStore';
 import { getTransactions, getTransactionDetail } from 'stores/transactions/transactionsThunks';
 import ETransactionStatus from 'models/ETransactionStatus';
+import ITransaction from 'models/ITransaction';
 import formatNumberToCurrency from 'utils/formatNumberToCurrency';
 
 type TTransactionListProps = {
   showTransactionDetail: () => void;
 };
 
-const emptyListMessage = 'Desculpe, nenhum título encontrado para o termo:';
+const emptyListFilterMessage = 'Desculpe, nenhuma transação encontrada para o filtro selecionado.';
+const emptyListSearchMessage = 'Desculpe, nenhum transação encontrada para o termo:';
 
 const tableHead = [
   {
@@ -55,7 +57,7 @@ const TransactionList: React.FC<TTransactionListProps> = ({ showTransactionDetai
     dispatch(getTransactions());
   }, [dispatch]);
 
-  const { list, searchTerm } = useSelector(({ transactions }: rootState) => transactions);
+  const { list, searchTerm, filter } = useSelector(({ transactions }: rootState) => transactions);
 
   const handleTransactionDetail = (id: string) => {
     dispatch(getTransactionDetail(id));
@@ -66,10 +68,27 @@ const TransactionList: React.FC<TTransactionListProps> = ({ showTransactionDetai
     return null;
   }
 
-  const filteredListBySearchTerm = list.filter(({ title }) => title.toLowerCase().includes(searchTerm.toLowerCase()));
+  const filteredList = list.filter((transaction) => {
+    const hasFilter = Object.entries(filter).map(([key, value]) => {
+      if (!value) {
+        return true;
+      }
+
+      return transaction[key as keyof ITransaction] === value;
+    });
+    return hasFilter.every((filter) => filter);
+  });
+
+  if (filteredList.length <= 0) {
+    return <EmptyList data-testid="transaction-empty-list">{emptyListFilterMessage}</EmptyList>;
+  }
+
+  const filteredListBySearchTerm = filteredList.filter(({ title }) =>
+    title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   if (filteredListBySearchTerm.length <= 0) {
-    return <EmptyList data-testid="transaction-empty-list">{`${emptyListMessage} ${searchTerm}`}</EmptyList>;
+    return <EmptyList data-testid="transaction-empty-list">{`${emptyListSearchMessage} ${searchTerm}`}</EmptyList>;
   }
 
   return (

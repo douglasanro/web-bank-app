@@ -9,6 +9,7 @@ const Header = styled.div`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing(2)};
+  margin-top: ${({ theme }) => theme.spacing(1)};
   margin-bottom: ${({ theme }) => theme.spacing(2)};
 `;
 
