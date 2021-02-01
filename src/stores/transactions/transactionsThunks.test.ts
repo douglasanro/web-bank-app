@@ -3,7 +3,7 @@ import thunk, { ThunkDispatch } from 'redux-thunk';
 import axios from 'axios'
 import configureMockStore from 'redux-mock-store';
 import { transactionsInitialState } from './transactionsReducers';
-import { getTransactions } from './transactionsThunks';
+import { getTransactions, getTransactionDetail } from './transactionsThunks';
 import { ITransactionsState } from './transactionsModels';
 import { rootState } from 'stores/rootStore';
 import ITransaction from 'models/ITransaction';
@@ -45,43 +45,95 @@ describe('transactions thunks', () => {
   })
 });
 
-it('should get transactions with success', async () => {
-  const expectedActions = [
-    {
-      type: '@transactions/FETCH_TRANSACTIONS_REQUEST'
-    },
-    {
-      payload: mockTransactions,
-      type: '@transactions/FETCH_TRANSACTIONS_SUCCESS'
-    },
-  ];
-  mockedAxios.get.mockReturnValue({
-    data: mockTransactions,
-    status: 200
-  } as any);
-  await store.dispatch(getTransactions());
-
-  expect(store.getActions()).toEqual(expectedActions);
-});
-
-it('should get transactions with failure', async () => {
-  const expectedActions = [
-    {
-      type: '@transactions/FETCH_TRANSACTIONS_REQUEST'
-    },
-    {
-      payload: {
-        data: {},
-        status: 404
+  it('should get transactions with success', async () => {
+    const expectedActions = [
+      {
+        type: '@transactions/FETCH_TRANSACTIONS_REQUEST'
       },
-      type: '@transactions/FETCH_TRANSACTIONS_FAILURE'
-  }];
-  mockedAxios.get.mockRejectedValue({
-    data: {},
-    status: 404
-  } as any);
-  await store.dispatch(getTransactions());
+      {
+        payload: mockTransactions,
+        type: '@transactions/FETCH_TRANSACTIONS_SUCCESS'
+      },
+    ];
+    mockedAxios.get.mockReturnValue({
+      data: mockTransactions,
+      status: 200
+    } as any);
+    await store.dispatch(getTransactions());
 
-  expect(store.getActions()).toEqual(expectedActions);
+    expect(store.getActions()).toEqual(expectedActions);
+  });
+
+  it('should get transactions with failure', async () => {
+    const expectedActions = [
+      {
+        type: '@transactions/FETCH_TRANSACTIONS_REQUEST'
+      },
+      {
+        payload: {
+          data: {},
+          status: 404
+        },
+        type: '@transactions/FETCH_TRANSACTIONS_FAILURE'
+    }];
+    mockedAxios.get.mockRejectedValue({
+      data: {},
+      status: 404
+    } as any);
+    await store.dispatch(getTransactions());
+
+    expect(store.getActions()).toEqual(expectedActions);
+  });
+
+  it('should get transaction detail with success', async () => {
+    const expectedActions = [
+      {
+        error: undefined,
+        meta: undefined,
+        payload: undefined,
+        type: '@transactions/CLEAR_TRANSACTION_DETAIL',
+      },
+      {
+        type: '@transactions/FETCH_TRANSACTION_DETAIL_REQUEST'
+      },
+      {
+        payload: mockTransactions[0],
+        type: '@transactions/FETCH_TRANSACTION_DETAIL_SUCCESS'
+      },
+    ];
+    mockedAxios.get.mockReturnValue({
+      data: mockTransactions[0],
+      status: 200
+    } as any);
+    await store.dispatch(getTransactionDetail('5f89f9f2f318e70ff298f528'));
+
+    expect(store.getActions()).toEqual(expectedActions);
+  });
+
+  it('should get transaction detail with failure', async () => {
+    const expectedActions = [
+      {
+        error: undefined,
+        meta: undefined,
+        payload: undefined,
+        type: '@transactions/CLEAR_TRANSACTION_DETAIL',
+      },
+      {
+        type: '@transactions/FETCH_TRANSACTION_DETAIL_REQUEST'
+      },
+      {
+        payload: {
+          data: {},
+          status: 404
+        },
+        type: '@transactions/FETCH_TRANSACTION_DETAIL_FAILURE'
+    }];
+    mockedAxios.get.mockRejectedValue({
+      data: {},
+      status: 404
+    } as any);
+    await store.dispatch(getTransactionDetail('5f89f9f2f318e70ff298f528'));
+
+    expect(store.getActions()).toEqual(expectedActions);
+  });
 });
-})

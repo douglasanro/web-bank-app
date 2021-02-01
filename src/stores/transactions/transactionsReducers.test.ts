@@ -25,7 +25,7 @@ const mockTransactions: ITransaction[] = [
 ];
 
 describe('transactions reducers', () => {
-  it('transactions  reducer expected state', () => {
+  it('list reducer expected state', () => {
     const action = {
       payload: mockTransactions,
       type: '@transactions/FETCH_TRANSACTIONS_SUCCESS',
@@ -35,6 +35,35 @@ describe('transactions reducers', () => {
     const expectedState = {
       ...transactionsInitialState,
       list: mockTransactions
+    }
+
+    expect(updatedState).toEqual(expectedState);
+  });
+
+  it('transaction detail reducer expected state', () => {
+    const action = {
+      payload: mockTransactions[0],
+      type: '@transactions/FETCH_TRANSACTION_DETAIL_SUCCESS',
+    };
+
+    const updatedState = transactionsReducers(undefined, action);
+    const expectedState = {
+      ...transactionsInitialState,
+      detail: mockTransactions[0]
+    }
+
+    expect(updatedState).toEqual(expectedState);
+  });
+
+    it('clear transaction detail reducer expected state', () => {
+    const action = {
+      type: '@transactions/CLEAR_TRANSACTION_DETAIL',
+    };
+
+    const updatedState = transactionsReducers(undefined, action);
+    const expectedState = {
+      ...transactionsInitialState,
+      detail: null
     }
 
     expect(updatedState).toEqual(expectedState);

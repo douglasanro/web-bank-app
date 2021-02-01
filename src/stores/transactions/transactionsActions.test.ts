@@ -1,5 +1,5 @@
 import transactionsReducers, { transactionsInitialState } from './transactionsReducers';
-import { setTransactions } from './transactionsActions';
+import { setTransactions, setTransactionDetail, clearTransactionDetail } from './transactionsActions';
 import ITransaction from 'models/ITransaction';
 
 const mockTransactions: ITransaction[] = [
@@ -36,4 +36,26 @@ describe('transactions actions', () => {
 
     expect(transactionsReducers(before, action)).toEqual(after);
   });
-})
+
+  it('should set transaction detail correctly', () => {
+    const before = transactionsInitialState;
+    const action = setTransactionDetail.success(mockTransactions[0]);
+    const after = {
+      ...transactionsInitialState,
+      detail: mockTransactions[0]
+    }
+
+    expect(transactionsReducers(before, action)).toEqual(after);
+  });
+
+  it('should clear transaction detail correctly', () => {
+    const before = transactionsInitialState;
+    const action = clearTransactionDetail();
+    const after = {
+      ...transactionsInitialState,
+      detail: null
+    }
+
+    expect(transactionsReducers(before, action)).toEqual(after);
+  });
+});
