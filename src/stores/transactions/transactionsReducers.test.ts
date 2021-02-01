@@ -83,4 +83,23 @@ describe('transactions reducers', () => {
 
     expect(updatedState).toEqual(expectedState);
   });
+
+  it('set transaction filter reducer expected state', () => {
+    const action = {
+      payload: {
+        status: 'created'
+      },
+      type: '@transactions/SET_TRANSACTION_FILTER',
+    };
+
+    const updatedState = transactionsReducers(undefined, action);
+    const expectedState = {
+      ...transactionsInitialState,
+      filter: {
+        status: 'created'
+      }
+    }
+
+    expect(updatedState).toEqual(expectedState);
+  });
 });
