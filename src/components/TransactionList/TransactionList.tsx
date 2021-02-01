@@ -8,7 +8,7 @@ import TableHeadCell from 'components/Table/TableHeadCell';
 import TableBody from 'components/Table/TableBody';
 import TableBodyCell from 'components/Table/TableBodyCell';
 import { rootState } from 'stores/rootStore';
-import { getTransactions } from 'stores/transactions/transactionsThunks';
+import { getTransactions, getTransactionDetail } from 'stores/transactions/transactionsThunks';
 import ETransactionStatus from 'models/ETransactionStatus';
 import formatNumberToCurrency from 'utils/formatNumberToCurrency';
 
@@ -50,6 +50,11 @@ const TransactionList: React.FC<TTransactionListProps> = ({ showTransactionDetai
 
   const { list } = useSelector(({ transactions }: rootState) => transactions);
 
+  const handleTransactionDetail = (id: string) => {
+    dispatch(getTransactionDetail(id));
+    showTransactionDetail();
+  };
+
   if (list.length <= 0) {
     return null;
   }
@@ -66,7 +71,7 @@ const TransactionList: React.FC<TTransactionListProps> = ({ showTransactionDetai
         </TableHead>
         <TableBody>
           {list.map(({ id, title, description, status, amount }) => (
-            <TableRow key={id} onClick={showTransactionDetail}>
+            <TableRow key={id} onClick={() => handleTransactionDetail(id)}>
               <TableBodyCell scope="row" label={tableHead[0].label}>
                 {title}
               </TableBodyCell>
