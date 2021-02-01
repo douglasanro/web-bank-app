@@ -75,7 +75,19 @@ describe('TransactionList component', () => {
     expect(queryByTestId(/transaction-list/i)).toBeNull();
   });
 
-  it('Should call showTransactionDetal correctly', () => {
+  it('Should return message if searched list is empty', () => {
+    store = mockStore({
+      transactions: {
+        ...transactionsInitialState,
+        list: mockTransactions,
+        searchTerm: 'Foo',
+      },
+    });
+    const { queryByTestId } = setup({ showTransactionDetail: mockShowTransactionDetail });
+    expect(queryByTestId(/transaction-empty-list/i)).toBeTruthy();
+  });
+
+  it('Should call showTransactionDetail correctly', () => {
     setup({
       showTransactionDetail: mockShowTransactionDetail,
     });

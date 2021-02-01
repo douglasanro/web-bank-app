@@ -5,6 +5,9 @@ import Header from 'components/Header';
 import Main from 'components/Main';
 import TransactionList from 'components/TransactionList';
 import TransactionDetail from 'components/TransactionDetail';
+import TransactionHeader from 'components/TransactionHeader';
+import TransactionSearch from 'components/TransactionSearch';
+import TransactionFilter from 'components/TransactionFilter';
 import Modal from 'components/Modal';
 import rootStore from 'stores/rootStore';
 import useModal from 'utils/useModal';
@@ -19,6 +22,10 @@ const App: React.FC = () => {
         <GlobalStyle />
         <Header title="Banco" />
         <Main>
+          <TransactionHeader>
+            <TransactionSearch placeholder="Pesquise pelo título" />
+            <TransactionFilter filter="status" />
+          </TransactionHeader>
           <TransactionList showTransactionDetail={toggle} />
         </Main>
         <Modal open={open} toggle={toggle}>

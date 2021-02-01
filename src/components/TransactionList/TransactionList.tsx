@@ -16,6 +16,8 @@ type TTransactionListProps = {
   showTransactionDetail: () => void;
 };
 
+const emptyListMessage = 'Desculpe, nenhum título encontrado para o termo:';
+
 const tableHead = [
   {
     id: 'title',
@@ -41,6 +43,11 @@ const List = styled.section`
   margin-bottom: ${({ theme }) => theme.spacing(1)};
 `;
 
+const EmptyList = styled.p`
+  margin-top: ${({ theme }) => theme.spacing(1)};
+  margin-bottom: ${({ theme }) => theme.spacing(1)};
+`;
+
 const TransactionList: React.FC<TTransactionListProps> = ({ showTransactionDetail }) => {
   const dispatch = useDispatch();
 
@@ -48,7 +55,7 @@ const TransactionList: React.FC<TTransactionListProps> = ({ showTransactionDetai
     dispatch(getTransactions());
   }, [dispatch]);
 
-  const { list } = useSelector(({ transactions }: rootState) => transactions);
+  const { list, searchTerm } = useSelector(({ transactions }: rootState) => transactions);
 
   const handleTransactionDetail = (id: string) => {
     dispatch(getTransactionDetail(id));
@@ -57,6 +64,12 @@ const TransactionList: React.FC<TTransactionListProps> = ({ showTransactionDetai
 
   if (list.length <= 0) {
     return null;
+  }
+
+  const filteredListBySearchTerm = list.filter(({ title }) => title.toLowerCase().includes(searchTerm.toLowerCase()));
+
+  if (filteredListBySearchTerm.length <= 0) {
+    return <EmptyList data-testid="transaction-empty-list">{`${emptyListMessage} ${searchTerm}`}</EmptyList>;
   }
 
   return (
@@ -70,7 +83,7 @@ const TransactionList: React.FC<TTransactionListProps> = ({ showTransactionDetai
           </TableRow>
         </TableHead>
         <TableBody>
-          {list.map(({ id, title, description, status, amount }) => (
+          {filteredListBySearchTerm.map(({ id, title, description, status, amount }) => (
             <TableRow key={id} onClick={() => handleTransactionDetail(id)}>
               <TableBodyCell scope="row" label={tableHead[0].label}>
                 {title}
