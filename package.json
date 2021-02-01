@@ -52,7 +52,10 @@
     ],
     "collectCoverageFrom": [
       "<rootDir>/**/*.{ts,tsx,js,jsx}",
-      "!<rootDir>/node_modules/"
+      "!<rootDir>/node_modules/",
+      "!src/**/*.d.ts",
+      "!src/index.tsx",
+      "!src/reportWebVitals.ts"
     ]
   },
   "browserslist": {
