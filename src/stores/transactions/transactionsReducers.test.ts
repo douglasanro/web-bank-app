@@ -55,7 +55,7 @@ describe('transactions reducers', () => {
     expect(updatedState).toEqual(expectedState);
   });
 
-    it('clear transaction detail reducer expected state', () => {
+  it('clear transaction detail reducer expected state', () => {
     const action = {
       type: '@transactions/CLEAR_TRANSACTION_DETAIL',
     };
@@ -64,6 +64,21 @@ describe('transactions reducers', () => {
     const expectedState = {
       ...transactionsInitialState,
       detail: null
+    }
+
+    expect(updatedState).toEqual(expectedState);
+  });
+
+  it('set transaction search term reducer expected state', () => {
+    const action = {
+      payload: 'Test',
+      type: '@transactions/SET_TRANSACTION_SEARCH_TERM',
+    };
+
+    const updatedState = transactionsReducers(undefined, action);
+    const expectedState = {
+      ...transactionsInitialState,
+      searchTerm: 'Test'
     }
 
     expect(updatedState).toEqual(expectedState);

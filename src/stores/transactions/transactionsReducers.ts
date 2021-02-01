@@ -4,7 +4,8 @@ import { ITransactionsState } from 'stores/transactions/transactionsModels';
 
 export const transactionsInitialState: ITransactionsState = {
   list: [],
-  detail: null
+  detail: null,
+  searchTerm: ''
 };
 
 const transactionsReducers = createReducer(transactionsInitialState, {
@@ -19,6 +20,10 @@ const transactionsReducers = createReducer(transactionsInitialState, {
   [ETransactionsActions.CLEAR_TRANSACTION_DETAIL]: (state) => ({
     ...state,
     detail: null
+  }),
+  [ETransactionsActions.SET_TRANSACTION_SEARCH_TERM]: (state, action) => ({
+    ...state,
+    searchTerm: action.payload
   }),
 });
 

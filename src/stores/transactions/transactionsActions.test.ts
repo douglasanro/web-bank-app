@@ -1,5 +1,5 @@
 import transactionsReducers, { transactionsInitialState } from './transactionsReducers';
-import { setTransactions, setTransactionDetail, clearTransactionDetail } from './transactionsActions';
+import { setTransactions, setTransactionDetail, clearTransactionDetail, setTransactionSearchTerm } from './transactionsActions';
 import ITransaction from 'models/ITransaction';
 
 const mockTransactions: ITransaction[] = [
@@ -54,6 +54,17 @@ describe('transactions actions', () => {
     const after = {
       ...transactionsInitialState,
       detail: null
+    }
+
+    expect(transactionsReducers(before, action)).toEqual(after);
+  });
+
+  it('should set transaction search term correctly', () => {
+    const before = transactionsInitialState;
+    const action = setTransactionSearchTerm('Test');
+    const after = {
+      ...transactionsInitialState,
+      searchTerm: 'Test'
     }
 
     expect(transactionsReducers(before, action)).toEqual(after);

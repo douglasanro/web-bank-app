@@ -8,7 +8,8 @@ export enum ETransactionsActions {
   FETCH_TRANSACTION_DETAIL_REQUEST = '@transactions/FETCH_TRANSACTION_DETAIL_REQUEST',
   FETCH_TRANSACTION_DETAIL_SUCCESS = '@transactions/FETCH_TRANSACTION_DETAIL_SUCCESS',
   FETCH_TRANSACTION_DETAIL_FAILURE = '@transactions/FETCH_TRANSACTION_DETAIL_FAILURE',
-  CLEAR_TRANSACTION_DETAIL = '@transactions/CLEAR_TRANSACTION_DETAIL'
+  CLEAR_TRANSACTION_DETAIL = '@transactions/CLEAR_TRANSACTION_DETAIL',
+  SET_TRANSACTION_SEARCH_TERM = '@transactions/SET_TRANSACTION_SEARCH_TERM'
 }
 
 export const setTransactions = createAsyncAction(
@@ -24,3 +25,5 @@ export const setTransactionDetail = createAsyncAction(
 )<undefined, ITransaction, Error>();
 
 export const clearTransactionDetail = () => action(ETransactionsActions.CLEAR_TRANSACTION_DETAIL);
+
+export const setTransactionSearchTerm = (term: string) => action(ETransactionsActions.SET_TRANSACTION_SEARCH_TERM, term);
